@@ -1,6 +1,20 @@
 <script lang="ts">
+import SelecionarIngredientes from './SelecionarIngredientes.vue';
+
 export default {
-  name: 'ConteudoPrincipal'
+  name: 'ConteudoPrincipal',
+  data(){
+    return {
+      ingredientes: [
+        {nome: 'Alho'},
+        {nome: 'Manteiga'},
+        {nome: 'Oregáno'}
+      ]
+    }
+  },
+  components: {
+    SelecionarIngredientes
+  }
 }
 </script>
 
@@ -10,19 +24,19 @@ export default {
       <span class="subtitulo-lg sua-lista-texto">
         Sua lista
       </span>
+      <ul v-if="ingredientes.length != 0"    class="ingredientes-sua-lista">
+        <li v-for="ingrediente in ingredientes" :key="ingrediente.nome" class="ingrediente">
+         {{ ingrediente.nome}}
+        </li>
+     </ul>
+      <p v-else class="paragrafo lista-vazia">
+          <img src="../assets/imagens/icones/lista-vazia.svg" alt="iconde de lista vazia">
+          Sua lista está vazia, selecione ingredientes para iniciar.
+      </p>
     </section>
 
-    <ul class="ingredientes-sua-lista">
-        <li class="ingrediente">
-          Alho
-        </li>
-        <li class="ingrediente">
-          Manteiga
-        </li>
-        <li class="ingredientes">
-          Oregáno
-        </li>
-    </ul>
+    <SelecionarIngredientes/> 
+
   </main>
 </template>
 
@@ -64,5 +78,29 @@ export default {
     color: var(--creme, #FFFAF3);
   background: var(--coral, #F0633C);
   font-weight: 700;
+}
+
+.lista-vazia{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+
+  color: var(--coral, #F0633C);
+  text-align: center;
+}
+
+@media only screen and (max-width: 1300px) {
+  .conteudo-principal {
+    padding: 5rem 3.75rem;
+    gap: 3.5rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .conteudo-principal {
+    padding: 4rem 1.5rem;
+    gap: 4rem;
+  }
 }
 </style>
