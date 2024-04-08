@@ -38,15 +38,16 @@ export default {
 <template>
   <main class="conteudo-principal">
 
-    <SuaLista :ingredientes="ingredientes"/>
+    <SuaLista v-if="conteudo === 'SelecionarIngredientes'" :ingredientes="ingredientes"/>
 
     <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
         @remover-ingrediente="removerIngrediente($event)"
         @adicionar-Ingrediente="adicionarIngrediente($event)"
         @buscar-receitas="navegar('MostrarReceitas')"
+        :conteudo="conteudo"
     />
 
-    <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'"/>
+    <MostrarReceitas :ingredientes="ingredientes"  v-else-if="conteudo === 'MostrarReceitas'"/>
 
   </main>
   <FooterCooking/>
