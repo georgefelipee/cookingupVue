@@ -1,43 +1,55 @@
 <script lang="ts">
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
+import Tag from "@/components/Tag.vue";
+import SuaLista from "@/components/SuaLista.vue";
+import FooterCooking from "@/components/FooterCooking.vue";
+import MostrarReceitas from "@/components/MostrarReceitas.vue";
 
+type Paginas = "SelecionarIngredientes" | "MostrarReceitas";
 export default {
   name: 'ConteudoPrincipal',
-  data(){
+  data() {
     return {
-      ingredientes: [
-        {nome: 'Alho'},
-        {nome: 'Manteiga'},
-        {nome: 'Oregáno'}
-      ]
+      ingredientes: [] as {nome: string}[],
+      conteudo: "SelecionarIngredientes" as Paginas
     }
   },
   components: {
+    MostrarReceitas,
+    FooterCooking,
+    SuaLista,
+    Tag,
     SelecionarIngredientes
+  },
+  methods : {
+    adicionarIngrediente(ingrediente: string){
+      this.ingredientes.push({nome: ingrediente})
+    },
+    removerIngrediente(ingrediente: string){
+      this.ingredientes = this.ingredientes.filter(ing => ing.nome !== ingrediente)
+    },
+    navegar(pagina: Paginas){
+      this.conteudo = pagina
+    }
   }
 }
 </script>
 
 <template>
   <main class="conteudo-principal">
-    <section>
-      <span class="subtitulo-lg sua-lista-texto">
-        Sua lista
-      </span>
-      <ul v-if="ingredientes.length != 0"    class="ingredientes-sua-lista">
-        <li v-for="ingrediente in ingredientes" :key="ingrediente.nome" class="ingrediente">
-         {{ ingrediente.nome}}
-        </li>
-     </ul>
-      <p v-else class="paragrafo lista-vazia">
-          <img src="../assets/imagens/icones/lista-vazia.svg" alt="iconde de lista vazia">
-          Sua lista está vazia, selecione ingredientes para iniciar.
-      </p>
-    </section>
 
-    <SelecionarIngredientes/> 
+    <SuaLista :ingredientes="ingredientes"/>
+
+    <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
+        @remover-ingrediente="removerIngrediente($event)"
+        @adicionar-Ingrediente="adicionarIngrediente($event)"
+        @buscar-receitas="navegar('MostrarReceitas')"
+    />
+
+    <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'"/>
 
   </main>
+  <FooterCooking/>
 </template>
 
 <style scoped>
@@ -53,43 +65,6 @@ export default {
   gap: 5rem;
 }
 
-.sua-lista-texto{
-  color: var(--coral, #F0633C);
-  display: block;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.ingredientes-sua-lista {
-  display: flex;
-  justify-content: center;
-  gap: 1rem 1.5rem;
-  flex-wrap: wrap;
-}
-
-.ingrediente {
-  display: inline-block;
-  border-radius: 0.5rem;
-  min-width: 4.25rem;
-  padding: 0.5rem;
-
-  text-align: center;
-    transition:0.2s;
-    color: var(--creme, #FFFAF3);
-  background: var(--coral, #F0633C);
-  font-weight: 700;
-}
-
-.lista-vazia{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-
-  color: var(--coral, #F0633C);
-  text-align: center;
-}
 
 @media only screen and (max-width: 1300px) {
   .conteudo-principal {
@@ -97,6 +72,7 @@ export default {
     gap: 3.5rem;
   }
 }
+
 @media only screen and (max-width: 767px) {
   .conteudo-principal {
     padding: 4rem 1.5rem;

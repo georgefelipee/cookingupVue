@@ -1,12 +1,21 @@
 <script lang="ts">
 import { obterCategorias } from '@/http';
+import type {ICategoria} from "@/interfaces/ICategoria";
+import CardCategoria from "@/components/CardCategoria.vue";
+import BuscarReceita from "@/components/BuscarReceita.vue";
+import FooterCooking from "@/components/FooterCooking.vue";
 
    export default {
+     components: {FooterCooking, BuscarReceita, CardCategoria},
       data(){
          return {
-            categorias: obterCategorias()
+            categorias: [] as ICategoria[]
          }
-      }
+      },
+     async created(){
+        this.categorias = await obterCategorias();
+     },
+     emits: ["adicionarIngrediente", "removerIngrediente","buscarReceitas"]
    }
 </script>
 
@@ -17,12 +26,16 @@ import { obterCategorias } from '@/http';
 
    <ul class="categorias">
       <li v-for="categoria in categorias" :key="categoria.nome">
-         {{ categoria.nome }}
+        <CardCategoria
+            @remover-ingrediente="$emit('removerIngrediente', $event)"
+            @adicionar-ingrediente=" $emit('adicionarIngrediente', $event)"
+            :categoria="categoria"/>
       </li>
    </ul>
    <p class="paragrafo dica">
       *Atenção: consideramos que você tem em casa sal, pimenta e água.
    </p>
+  <BuscarReceita @click="$emit('buscarReceitas')" />
  </section>
 </template>
 
@@ -37,7 +50,9 @@ import { obterCategorias } from '@/http';
   margin-bottom: 1.5rem;
   display: block;
 }
-
+.instrucoes {
+  margin-bottom: 2rem;
+}
 .categorias{
 margin-bottom: 1rem;
 display: flex;
