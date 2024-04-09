@@ -29,6 +29,7 @@ export default {
       this.ingredientes = this.ingredientes.filter(ing => ing.nome !== ingrediente)
     },
     navegar(pagina: Paginas){
+      console.log(pagina)
       this.conteudo = pagina
     }
   }
@@ -40,14 +41,15 @@ export default {
 
     <SuaLista v-if="conteudo === 'SelecionarIngredientes'" :ingredientes="ingredientes"/>
 
-    <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
-        @remover-ingrediente="removerIngrediente($event)"
-        @adicionar-Ingrediente="adicionarIngrediente($event)"
-        @buscar-receitas="navegar('MostrarReceitas')"
-        :conteudo="conteudo"
-    />
-
-    <MostrarReceitas :ingredientes="ingredientes"  v-else-if="conteudo === 'MostrarReceitas'"/>
+    <KeepAlive include="SelecionarIngredientes">
+      <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
+                              @remover-ingrediente="removerIngrediente($event)"
+                              @adicionar-Ingrediente="adicionarIngrediente($event)"
+                              @buscar-receitas="navegar('MostrarReceitas')"
+                              :conteudo="conteudo"
+      />
+      <MostrarReceitas @editar-lista="navegar('SelecionarIngredientes')" :ingredientes="ingredientes"  v-else-if="conteudo === 'MostrarReceitas'"/>
+    </KeepAlive>
 
   </main>
   <FooterCooking/>

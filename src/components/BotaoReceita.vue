@@ -1,10 +1,15 @@
 <script lang="ts">
-
+export default {
+  name: 'BotaoReceita',
+  props: {
+    msg: String
+  }
+}
 </script>
 
 <template>
   <button class="buscar__receita">
-    Buscar Receitas!
+    {{msg}}
   </button>
 </template>
 

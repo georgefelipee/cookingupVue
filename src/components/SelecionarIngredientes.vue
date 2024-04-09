@@ -2,11 +2,12 @@
 import { obterCategorias } from '@/http';
 import type {ICategoria} from "@/interfaces/ICategoria";
 import CardCategoria from "@/components/CardCategoria.vue";
-import BuscarReceita from "@/components/BuscarReceita.vue";
+import BotaoReceita from "@/components/BotaoReceita.vue";
 import FooterCooking from "@/components/FooterCooking.vue";
 
    export default {
-     components: {FooterCooking, BuscarReceita, CardCategoria},
+     name: 'SelecionarIngredientes',
+     components: {FooterCooking, BotaoReceita, CardCategoria},
       data(){
          return {
             categorias: [] as ICategoria[]
@@ -35,7 +36,7 @@ import FooterCooking from "@/components/FooterCooking.vue";
    <p class="paragrafo dica">
       *Atenção: consideramos que você tem em casa sal, pimenta e água.
    </p>
-  <BuscarReceita @click="$emit('buscarReceitas')" />
+  <BotaoReceita msg="Buscar Receita" @click="$emit('buscarReceitas')" />
  </section>
 </template>
 
